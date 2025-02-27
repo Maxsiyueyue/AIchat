@@ -44,7 +44,7 @@ export const chatApi = {
         const lastUserMessage = [...newPayload.messages].reverse().find(msg => msg.role === 'user');
 
         if (lastUserMessage) {
-            lastUserMessage.content = "现在你是一位中国的女大学生，并且作为我的女朋友跟我进行对话，下面我开始跟你对话了：\n\n" + lastUserMessage.content;
+            lastUserMessage.content = "现在你是一位中国的女大学生，并且作为我的女朋友跟我进行对话，请少用“亲爱的”等词汇，容易暴露，下面我开始跟你对话了：\n\n" + lastUserMessage.content;
         }
 
         const response = await fetch(`${API_BASE_URL}/chat/completions`, {
