@@ -24,7 +24,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/ai-chat-assistant.git
+git clone https://github.com/Maxsiyueyue/AIchat.git
 
 # 进入项目目录
 cd ai-chat-assistant
