@@ -1,7 +1,7 @@
 <template>
   <!-- 设置抽屉组件，用于展示和编辑应用设置 -->
-  <el-drawer 
-    style="background-color: var(--bg-color);"
+  <el-drawer
+    style="background-color: var(--bg-color)"
     v-model="visible"
     title="设置"
     direction="rtl"
@@ -19,7 +19,7 @@
         </el-form-item>
 
         <!-- 模型选择 -->
-        <el-form-item label="模型">
+        <el-form-item label="后宫佳丽">
           <el-select v-model="settings.model" class="w-full">
             <el-option
               v-for="model in modelOptions"
@@ -31,7 +31,7 @@
         </el-form-item>
 
         <!-- Temperature设置 -->
-        <el-form-item label="Temperature">
+        <!-- <el-form-item label="Temperature">
           <el-slider
             v-model="settings.temperature"
             :min="0"
@@ -39,38 +39,47 @@
             :step="0.1"
             show-input
           />
-        </el-form-item>
+        </el-form-item> -->
 
         <!-- 最大Token设置 -->
-        <el-form-item label="最大Token">
+        <!-- <el-form-item label="最大Token">
           <el-input-number
             v-model="settings.maxTokens"
             :min="1"
             :max="4096"
             :step="1"
           />
-        </el-form-item>
+        </el-form-item> -->
 
         <!-- API Key输入 -->
-        <el-form-item label="API Key">
+        <el-form-item>
+          <template #label>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="这里是Tooltip提示的内容"
+              placement="top"
+            >
+              <span style="color: rgb(121.3, 187.1, 255)">翻牌子</span>
+            </el-tooltip>
+          </template>
           <el-input
             v-model="settings.apiKey"
             type="password"
             show-password
             placeholder="请输入API Key"
+            @click="openregisterurl"
           />
         </el-form-item>
 
         <!-- 流式响应切换 -->
         <el-form-item label="流式响应">
-          <el-switch
-            v-model="settings.streamResponse"
-          />
+          <el-switch v-model="settings.streamResponse" />
           <div class="form-item-tip">开启后将实时显示AI回复</div>
         </el-form-item>
 
         <!-- Top P -->
-        <el-form-item label="Top P">
+        <!-- <el-form-item label="Top P">
           <el-slider
             v-model="settings.topP"
             :min="0"
@@ -78,17 +87,17 @@
             :step="0.1"
             show-input
           />
-        </el-form-item>
+        </el-form-item> -->
 
         <!-- Top K -->
-        <el-form-item label="Top K">
+        <!-- <el-form-item label="Top K">
           <el-input-number
             v-model="settings.topK"
             :min="1"
             :max="100"
             :step="1"
           />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
 
       <!-- 保存设置按钮 -->
@@ -100,26 +109,26 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useSettingsStore, modelOptions } from '../stores/settings'
-import { ElMessage } from 'element-plus'
+import { ref, reactive, computed } from "vue";
+import { useSettingsStore, modelOptions } from "../stores/settings";
+import { ElMessage } from "element-plus";
 
 // 定义组件的props
 const props = defineProps({
-  modelValue: Boolean
-})
+  modelValue: Boolean,
+});
 
 // 定义组件的emits
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 // 使用设置存储
-const settingsStore = useSettingsStore()
+const settingsStore = useSettingsStore();
 
 // 可见性计算属性，同步抽屉的可见性状态
 const visible = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
+  set: (value) => emit("update:modelValue", value),
+});
 
 // 设置对象，使用reactive进行响应式处理
 const settings = reactive({
@@ -130,24 +139,28 @@ const settings = reactive({
   apiKey: settingsStore.apiKey,
   streamResponse: settingsStore.streamResponse,
   topP: settingsStore.topP,
-  topK: settingsStore.topK
-})
+  topK: settingsStore.topK,
+});
 
 // 处理深色模式切换
 const handleDarkModeChange = (value) => {
-  settingsStore.toggleDarkMode()
-}
+  settingsStore.toggleDarkMode();
+};
 
 // 保存设置
 const handleSave = () => {
-  settingsStore.updateSettings(settings)
-  ElMessage.success('设置已保存')
-  visible.value = false
-}
+  settingsStore.updateSettings(settings);
+  ElMessage.success("设置已保存");
+  visible.value = false;
+};
+
+// 打开key注册页面
+let openregisterurl = () => {
+  window.open("https://siliconflow.cn/zh-cn/models");
+};
 </script>
 
 <style lang="scss" scoped>
-
 // 设置页面样式
 .settings-container {
   padding: 1rem;

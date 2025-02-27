@@ -1,15 +1,15 @@
 <template>
   <!-- 消息容器，根据消息角色和加载状态动态调整样式 -->
-  <div 
+  <div
     class="message-container"
     :class="[
       message.role === 'assistant' ? 'message-assistant' : 'message-user',
-      { 'loading': loading }
+      { loading: loading },
     ]"
   >
     <!-- 消息头像，根据消息角色显示不同图标 -->
     <div class="message-avatar">
-      <el-avatar 
+      <el-avatar
         :icon="message.role === 'assistant' ? 'ChatRound' : 'User'"
         :class="message.role"
       />
@@ -17,9 +17,20 @@
     <!-- 消息内容，根据加载状态显示不同内容 -->
     <div class="message-content">
       <!-- 显示模式 -->
-      <div class="message-text" v-if="!loading && !isEditing">
+      <div v-if="!loading && !isEditing">
         <!-- 使用 v-html 渲染 Markdown 内容 -->
-        <div class="markdown-body" v-html="renderedContent" ref="markdownBody" @click="handleCodeBlockClick"></div>
+        <el-tag
+          :type="message.role === 'assistant' ? 'primary' : 'success'"
+          size="large"
+          style="height: auto !important;min-height: 50px;"
+        >
+          <div
+            class="markdown-body"
+            v-html="renderedContent"
+            ref="markdownBody"
+            @click="handleCodeBlockClick"
+          ></div>
+        </el-tag>
       </div>
 
       <!-- 编辑模式 -->
@@ -32,10 +43,13 @@
           ref="editInputRef"
           @keydown.enter.exact.prevent="handleEditKeydown"
           @keydown.esc="cancelEdit"
+          style="margin-bottom: 0.5rem"
         />
         <div class="edit-actions">
           <el-button size="small" @click="cancelEdit">取消</el-button>
-          <el-button type="primary" size="small" @click="saveEdit">保存</el-button>
+          <el-button type="primary" size="small" @click="saveEdit"
+            >保存</el-button
+          >
         </div>
       </div>
 
@@ -48,7 +62,10 @@
       <div class="message-footer">
         <span class="message-time">{{ formatTime(message.timestamp) }}</span>
         <!-- 用户消息的操作按钮 -->
-        <div class="message-actions" v-if="!loading && message.role === 'user' && !isEditing">
+        <div
+          class="message-actions"
+          v-if="!loading && message.role === 'user' && !isEditing"
+        >
           <el-button-group>
             <el-button type="text" size="small" @click="startEdit">
               <el-icon><Edit /></el-icon>
@@ -59,21 +76,24 @@
           </el-button-group>
         </div>
         <!-- AI助手消息的操作按钮 -->
-        <div class="message-actions" v-if="!loading && message.role === 'assistant'">
+        <div
+          class="message-actions"
+          v-if="!loading && message.role === 'assistant'"
+        >
           <el-button-group>
-            <el-button 
-              type="text" 
-              size="small" 
-              @click="handleRegenerate" 
+            <el-button
+              type="text"
+              size="small"
+              @click="handleRegenerate"
               :title="'重新生成'"
               :disabled="isLoading"
             >
               <el-icon><RefreshRight /></el-icon>
             </el-button>
-            <el-button 
-              type="text" 
-              size="small" 
-              @click="handleCopyAll" 
+            <el-button
+              type="text"
+              size="small"
+              @click="handleCopyAll"
               :title="'复制全部'"
             >
               <el-icon><CopyDocument /></el-icon>
@@ -86,135 +106,136 @@
 </template>
 
 <script setup>
-import { computed, ref, nextTick } from 'vue'
-import { renderMarkdown } from '../utils/markdown'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { Edit, Delete, RefreshRight, CopyDocument } from '@element-plus/icons-vue'
-import { useChatStore } from '../stores/chat'
+import { computed, ref, nextTick } from "vue";
+import { renderMarkdown } from "../utils/markdown";
+import { ElMessage, ElMessageBox } from "element-plus";
+import {
+  Edit,
+  Delete,
+  RefreshRight,
+  CopyDocument,
+} from "@element-plus/icons-vue";
+import { useChatStore } from "../stores/chat";
 
 // 定义组件属性
 const props = defineProps({
   message: {
     type: Object,
-    required: true
+    required: true,
   },
   loading: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-const emit = defineEmits(['update', 'delete', 'regenerate'])
+const emit = defineEmits(["update", "delete", "regenerate"]);
 
-const markdownBody = ref(null)
-const isEditing = ref(false)
-const editContent = ref('')
-const editInputRef = ref(null)
+const markdownBody = ref(null);
+const isEditing = ref(false);
+const editContent = ref("");
+const editInputRef = ref(null);
 
 // 从 store 中获取 loading 状态
-const chatStore = useChatStore()
-const isLoading = computed(() => chatStore.isLoading)
+const chatStore = useChatStore();
+const isLoading = computed(() => chatStore.isLoading);
 
 // 开始编辑
 const startEdit = async () => {
-  editContent.value = props.message.content
-  isEditing.value = true
+  editContent.value = props.message.content;
+  isEditing.value = true;
   // 等待 DOM 更新后聚焦输入框
-  await nextTick()
-  editInputRef.value?.input?.focus()
-}
+  await nextTick();
+  editInputRef.value?.input?.focus();
+};
 
 // 取消编辑
 const cancelEdit = () => {
-  isEditing.value = false
-  editContent.value = ''
-}
+  isEditing.value = false;
+  editContent.value = "";
+};
 
 // 保存编辑
 const saveEdit = () => {
   if (!editContent.value.trim()) {
-    ElMessage.warning('消息内容不能为空')
-    return
+    ElMessage.warning("消息内容不能为空");
+    return;
   }
-  emit('update', {
+  emit("update", {
     ...props.message,
-    content: editContent.value.trim()
-  })
-  isEditing.value = false
-}
+    content: editContent.value.trim(),
+  });
+  isEditing.value = false;
+};
 
 // 删除消息
 const handleDelete = async () => {
   try {
-    await ElMessageBox.confirm(
-      '确定要删除这条消息吗？',
-      '警告',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    )
-    emit('delete', props.message)
+    await ElMessageBox.confirm("确定要删除这条消息吗？", "警告", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    });
+    emit("delete", props.message);
   } catch {
     // 用户取消删除操作
   }
-}
+};
 
 // 格式化时间函数
 const formatTime = (timestamp) => {
-  return new Date(timestamp).toLocaleTimeString()
-}
+  return new Date(timestamp).toLocaleTimeString();
+};
 
 // 计算属性：渲染 Markdown 内容
 const renderedContent = computed(() => {
-  return renderMarkdown(props.message.content)
-})
+  return renderMarkdown(props.message.content);
+});
 
 // 复制文本到剪贴板
 const copyToClipboard = async (text) => {
   try {
-    await navigator.clipboard.writeText(text)
-    ElMessage.success('代码已复制到剪贴板')
+    await navigator.clipboard.writeText(text);
+    ElMessage.success("代码已复制到剪贴板");
   } catch (err) {
-    console.error('复制失败:', err)
-    ElMessage.error('复制失败')
+    console.error("复制失败:", err);
+    ElMessage.error("复制失败");
   }
-}
+};
 
 // 处理代码块点击事件
 const handleCodeBlockClick = (event) => {
-  const preElement = event.target.closest('pre')
+  const preElement = event.target.closest("pre");
   if (preElement) {
-    const codeElement = preElement.querySelector('code')
+    const codeElement = preElement.querySelector("code");
     if (codeElement) {
-      copyToClipboard(codeElement.textContent)
+      copyToClipboard(codeElement.textContent);
     }
   }
-}
+};
 
 // 处理编辑时的按键事件
 const handleEditKeydown = (e) => {
-  if (e.shiftKey) return // 如果按住 Shift，允许换行
-  saveEdit() // 直接保存并发送
-}
+  if (e.shiftKey) return; // 如果按住 Shift，允许换行
+  saveEdit(); // 直接保存并发送
+};
 
 // 处理重新生成
 const handleRegenerate = () => {
-  console.log('重新生成')
-  emit('regenerate', props.message)
-}
+  console.log("重新生成");
+  emit("regenerate", props.message);
+};
 
 // 复制全部内容
 const handleCopyAll = async () => {
   try {
-    await navigator.clipboard.writeText(props.message.content)
-    ElMessage.success('内容已复制到剪贴板')
+    await navigator.clipboard.writeText(props.message.content);
+    ElMessage.success("内容已复制到剪贴板");
   } catch (err) {
-    console.error('复制失败:', err)
-    ElMessage.error('复制失败')
+    console.error("复制失败:", err);
+    ElMessage.error("复制失败");
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -224,7 +245,7 @@ const handleCopyAll = async () => {
   padding: 0.5rem;
   gap: 1rem;
   transition: all 0.3s ease;
-  
+
   // 用户消息样式
   &.message-user {
     flex-direction: row-reverse;
@@ -237,7 +258,12 @@ const handleCopyAll = async () => {
   .markdown-body {
     :deep() {
       // Markdown 内容样式
-      h1, h2, h3, h4, h5, h6 {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         margin: 0.5rem 0;
         font-weight: 600;
         line-height: 1.25;
@@ -267,7 +293,7 @@ const handleCopyAll = async () => {
         border-radius: var(--border-radius);
         margin: 0.5rem 0;
         border: 1px solid var(--border-color);
-        
+
         // 代码头部样式
         .code-header {
           position: absolute;
@@ -281,7 +307,7 @@ const handleCopyAll = async () => {
           justify-content: space-between;
           align-items: center;
           font-family: var(--code-font-family);
-          
+
           .code-lang {
             font-size: 0.8rem;
             color: var(--text-color-secondary);
@@ -323,7 +349,8 @@ const handleCopyAll = async () => {
         border-left: 0.25rem solid var(--border-color);
       }
 
-      ul, ol {
+      ul,
+      ol {
         margin: 0.25rem 0;
         padding-left: 1.5rem;
       }
@@ -333,7 +360,8 @@ const handleCopyAll = async () => {
         width: 100%;
         margin: 0.25rem 0;
 
-        th, td {
+        th,
+        td {
           padding: 0.5rem;
           border: 1px solid var(--border-color);
         }
@@ -350,7 +378,7 @@ const handleCopyAll = async () => {
         margin: 0.5rem 0;
         border-radius: var(--border-radius);
         cursor: pointer;
-        
+
         &:hover {
           opacity: 0.9;
         }
@@ -374,10 +402,10 @@ const handleCopyAll = async () => {
 
 .message-avatar {
   flex-shrink: 0;
-  
+
   .el-avatar {
     background-color: var(--primary-color);
-    
+
     &.assistant {
       background-color: var(--success-color);
     }
@@ -404,7 +432,7 @@ const handleCopyAll = async () => {
   align-items: center;
   gap: 0.5rem;
   color: var(--text-color-secondary);
-  
+
   .el-icon {
     font-size: 1.2rem;
   }
@@ -433,19 +461,19 @@ const handleCopyAll = async () => {
   gap: 0.25rem;
   opacity: 0.6;
   transition: opacity 0.2s ease;
-  
+
   &:hover {
     opacity: 1;
   }
-  
+
   .el-button {
     padding: 2px 4px;
     height: 20px;
-    
+
     .el-icon {
       font-size: 14px;
     }
-    
+
     &:hover {
       color: var(--primary-color);
       background-color: var(--bg-color-secondary);
@@ -461,12 +489,12 @@ const handleCopyAll = async () => {
 
   .el-input {
     margin-bottom: 0.5rem;
-    
+
     :deep(.el-textarea__inner) {
       background-color: var(--bg-color-secondary);
       border-color: var(--border-color);
       resize: none; // 禁用手动调整大小
-      
+
       &:focus {
         border-color: var(--primary-color);
       }

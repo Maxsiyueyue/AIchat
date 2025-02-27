@@ -57,10 +57,9 @@ export const useSettingsStore = defineStore('settings', {
 
 // 导出模型选项供其他组件使用
 export const modelOptions = [
-    { label: 'GLM-4-9B', value: 'THUDM/glm-4-9b-chat' },
-    { label: 'Qwen2.5-7B', value: 'Qwen/Qwen2.5-7B-Instruct' },
-    { label: 'Qwen2.5-Coder-7B', value: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
-    { label: 'Meta-Llama-3.1-8B', value: 'meta-llama/Meta-Llama-3.1-8B-Instruct' },
-    // { label: 'Gemma-2-9B', value: 'google/gemma-2-9b-it' },  //不知道为什么用不了
-    { label: 'DeepSeek-V2.5', value: 'deepseek-ai/DeepSeek-V2.5' },
+    { label: '甄嬛（GLM-4-9B）', value: 'THUDM/glm-4-9b-chat' },
+    { label: '华妃（Qwen2.5-7B）', value: 'Qwen/Qwen2.5-7B-Instruct' },
+    { label: '安陵容（Qwen2.5-Coder-7B）', value: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
+    { label: '沈眉庄（Meta-Llama-3.1-8B）', value: 'meta-llama/Meta-Llama-3.1-8B-Instruct' },
+    { label: '皇后宜修（DeepSeek-V2.5）', value: 'deepseek-ai/DeepSeek-V2.5' },
 ]
