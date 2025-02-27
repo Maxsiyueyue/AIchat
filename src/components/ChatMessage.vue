@@ -10,11 +10,7 @@
     <!-- 消息头像，根据消息角色显示不同图标 -->
     <div class="message-avatar">
       <el-avatar
-        :icon="
-          message.role === 'assistant'
-            ? '../assets/导航-人工智能.png'
-            : '../assets/我的.png'
-        "
+        :src="message.role === 'assistant' ? aiobjects : userlogo"
         :class="message.role"
       />
     </div>
@@ -120,6 +116,11 @@ import {
   CopyDocument,
 } from "@element-plus/icons-vue";
 import { useChatStore } from "../stores/chat";
+import aiobjects1 from "../assets/icon/headsLike.png";
+import userlogo1 from "../assets/icon/user.png";
+
+let aiobjects = aiobjects1;
+let userlogo = userlogo1;
 
 // 定义组件属性
 const props = defineProps({
@@ -408,10 +409,10 @@ const handleCopyAll = async () => {
   flex-shrink: 0;
 
   .el-avatar {
-    background-color: var(--primary-color);
+    background-color: rgb(235.9, 245.3, 255);
 
     &.assistant {
-      background-color: var(--success-color);
+      background-color: rgb(235.9, 245.3, 255);
     }
   }
 }
