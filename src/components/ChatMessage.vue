@@ -10,7 +10,11 @@
     <!-- 消息头像，根据消息角色显示不同图标 -->
     <div class="message-avatar">
       <el-avatar
-        :icon="message.role === 'assistant' ? 'ChatRound' : 'User'"
+        :icon="
+          message.role === 'assistant'
+            ? '../assets/导航-人工智能.png'
+            : '../assets/我的.png'
+        "
         :class="message.role"
       />
     </div>
@@ -22,7 +26,7 @@
         <el-tag
           :type="message.role === 'assistant' ? 'primary' : 'success'"
           size="large"
-          style="height: auto !important;min-height: 50px;"
+          style="height: auto !important; min-height: 50px"
         >
           <div
             class="markdown-body"
