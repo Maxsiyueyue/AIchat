@@ -3,7 +3,7 @@
     <div class="chat-container">
         <!-- 聊天头部，包含标题和设置按钮 -->
         <div class="chat-header">
-            <h1>AI Chat</h1>
+            <h1>AI对象</h1>
             <el-button circle :icon="Setting" @click="showSettings = true" />
         </div>
 
@@ -11,7 +11,8 @@
         <div class="messages-container" ref="messagesContainer">
             <template v-if="messages.length">
                 <chat-message v-for="message in messages" :key="message.id" :message="message"
-                    :loading="message.loading" @update="handleMessageUpdate" @delete="handleMessageDelete" @regenerate="handleRegenerate" />
+                    :loading="message.loading" @update="handleMessageUpdate" @delete="handleMessageDelete"
+                    @regenerate="handleRegenerate" />
             </template>
             <div v-else class="empty-state">
                 <el-empty description="开始对话吧" />
@@ -62,7 +63,7 @@ watch(messages, () => {
  * @param {string} content 用户输入的消息内容
  */
 const handleSend = async (content) => {
-    console.log('发送消息',content)
+    console.log('发送消息', content)
 
     // if (isLoading.value) return
     // 添加用户消息和助理的空消息
@@ -137,16 +138,16 @@ const handleRegenerate = async (message) => {
     console.log(message)
     console.log(chatStore.messages)
 
-    const index = chatStore.messages.findIndex(m => m.id === message.id&&m.role==="assistant")
+    const index = chatStore.messages.findIndex(m => m.id === message.id && m.role === "assistant")
     console.log(index)
     if (index !== -1 && index > 0) {
         // 获取上一条用户消息
         const userMessage = chatStore.messages[index - 1]
         // 删除当前的AI回复,但是删了后再发送的时候，userMessage不会指向当前这个
-        chatStore.messages.splice(index-1, 2)
+        chatStore.messages.splice(index - 1, 2)
         // 重新发送请求前应该检查 isLoading 状态
         if (isLoading.value) return
-        
+
         chatStore.isLoading = true
         try {
             console.log(userMessage.content)
