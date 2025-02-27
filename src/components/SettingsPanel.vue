@@ -60,7 +60,12 @@
               content="这里是Tooltip提示的内容"
               placement="top"
             >
-              <span style="color: rgb(121.3, 187.1, 255)">翻牌子</span>
+              <span
+                style="color: rgb(121.3, 187.1, 255)"
+                @click="openregisterurl"
+                @click.stop
+                >翻牌子</span
+              >
             </el-tooltip>
           </template>
           <el-input
@@ -68,7 +73,6 @@
             type="password"
             show-password
             placeholder="请输入API Key"
-            @click="openregisterurl"
           />
         </el-form-item>
 
