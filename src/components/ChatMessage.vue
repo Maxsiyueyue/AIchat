@@ -22,7 +22,13 @@
         <el-tag
           :type="message.role === 'assistant' ? 'primary' : 'success'"
           size="large"
-          style="height: auto !important; min-height: 50px"
+          style="
+            max-width: 50vw;
+            word-wrap: break-word;
+            white-space: normal;
+            /* height: auto !important; */
+            min-height: 50px;
+          "
         >
           <div
             class="markdown-body"
