@@ -3,7 +3,7 @@
   <div
     class="message-container"
     :class="[
-      message.role === 'assistant' ? 'message-assistant' : 'message-user',
+      message.role === 'assistant' ? '../assets/导航-人工智能.png' : '../assets/我的.png',
       { loading: loading },
     ]"
   >
