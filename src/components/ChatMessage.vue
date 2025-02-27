@@ -26,7 +26,7 @@
             max-width: 50vw;
             word-wrap: break-word;
             white-space: normal;
-            /* height: auto !important; */
+            height: auto !important;
             min-height: 50px;
           "
         >
