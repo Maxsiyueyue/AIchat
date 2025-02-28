@@ -57,7 +57,7 @@
             <el-tooltip
               class="item"
               effect="dark"
-              content="这里是Tooltip提示的内容"
+              content="点击获取api key"
               placement="top"
             >
               <span

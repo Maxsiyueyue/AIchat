@@ -61,5 +61,5 @@ export const modelOptions = [
     { label: '华妃（Qwen2.5-7B）', value: 'Qwen/Qwen2.5-7B-Instruct' },
     { label: '安陵容（Qwen2.5-Coder-7B）', value: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
     { label: '沈眉庄（Meta-Llama-3.1-8B）', value: 'meta-llama/Meta-Llama-3.1-8B-Instruct' },
-    { label: '皇后宜修（DeepSeek-V2.5）', value: 'deepseek-ai/DeepSeek-V2.5' },
+    { label: '乌拉那拉·宜修（DeepSeek-V2.5）', value: 'deepseek-ai/DeepSeek-V2.5' },
 ]
