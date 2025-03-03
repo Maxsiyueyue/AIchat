@@ -46,9 +46,7 @@ export const useSettingsStore = defineStore('settings', {
         // 持久化策略数组
         strategies: [
             {
-                // 存储键名
                 key: 'ai-chat-settings',
-                // 存储方式，这里使用的是 localStorage
                 storage: localStorage,
             },
         ],
@@ -61,5 +59,5 @@ export const modelOptions = [
     { label: '安陵容（Qwen2.5-Coder-7B）', value: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
     { label: '沈眉庄（Meta-Llama-3.1-8B）', value: 'meta-llama/Meta-Llama-3.1-8B-Instruct' },
     { label: '乌拉那拉·宜修（DeepSeek-V2.5）', value: 'deepseek-ai/DeepSeek-V2.5' },
-    { label: '敬妃（deepseek-ai/DeepSeek-V3）', value: 'deepseek-ai/DeepSeek-V3' },
+    { label: '敬妃（DeepSeek-V3）', value: 'deepseek-ai/DeepSeek-V3' },
 ]
