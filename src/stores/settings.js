@@ -55,11 +55,11 @@ export const useSettingsStore = defineStore('settings', {
     },
 })
 
-// 导出模型选项供其他组件使用
 export const modelOptions = [
     { label: '甄嬛（GLM-4-9B）', value: 'THUDM/glm-4-9b-chat' },
     { label: '华妃（Qwen2.5-7B）', value: 'Qwen/Qwen2.5-7B-Instruct' },
     { label: '安陵容（Qwen2.5-Coder-7B）', value: 'Qwen/Qwen2.5-Coder-7B-Instruct' },
     { label: '沈眉庄（Meta-Llama-3.1-8B）', value: 'meta-llama/Meta-Llama-3.1-8B-Instruct' },
     { label: '乌拉那拉·宜修（DeepSeek-V2.5）', value: 'deepseek-ai/DeepSeek-V2.5' },
+    { label: '敬妃（deepseek-ai/DeepSeek-V3）', value: 'deepseek-ai/DeepSeek-V3' },
 ]

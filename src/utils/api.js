@@ -37,10 +37,8 @@ export const chatApi = {
             }]
         }
 
-        // 深拷贝 payload（推荐使用 structuredClone，如果环境不支持，则用 JSON 方式）
         const newPayload = structuredClone ? structuredClone(payload) : JSON.parse(JSON.stringify(payload));
 
-        // 找到最后一个 role 为 'user' 的消息
         const lastUserMessage = [...newPayload.messages].reverse().find(msg => msg.role === 'user');
 
         if (lastUserMessage) {
