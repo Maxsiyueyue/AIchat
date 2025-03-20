@@ -21,6 +21,8 @@ export const useSettingsStore = defineStore('settings', {
         topP: 0.7,
         // Top K 参数
         topK: 50,
+        // 默认提示词
+        value: 'Option2',
     }),
 
     // 定义 store 的动作
@@ -61,3 +63,27 @@ export const modelOptions = [
     { label: '乌拉那拉·宜修（DeepSeek-V2.5）', value: 'deepseek-ai/DeepSeek-V2.5' },
     { label: '敬妃（DeepSeek-V3）', value: 'deepseek-ai/DeepSeek-V3' },
 ]
+
+// 初始化提示词
+export const theSuggestionWord = [
+    {
+        value: "Option1",
+        label: "写作助理",
+    },
+    {
+        value: "Option2",
+        label: "ai对象",
+    },
+    {
+        value: "Option3",
+        label: "开发：Vue3",
+    },
+    {
+        value: "Option4",
+        label: "正则生成器",
+    },
+    {
+        value: "Option5",
+        label: "内容总结",
+    },
+];

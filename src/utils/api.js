@@ -15,6 +15,7 @@ export const chatApi = {
         const settingsStore = useSettingsStore()
         const payload = {
             model: settingsStore.model,
+            Value: settingsStore.value,
             messages,
             temperature: settingsStore.temperature,
             max_tokens: settingsStore.maxTokens,
@@ -41,8 +42,25 @@ export const chatApi = {
 
         const lastUserMessage = [...newPayload.messages].reverse().find(msg => msg.role === 'user');
 
+        // 关键词
         if (lastUserMessage) {
-            lastUserMessage.content = "现在你是一位中国的女大学生，模仿网络上大女学生的语气，并且作为我的女朋友跟我进行对话，下面我开始跟你对话了：\n\n" + lastUserMessage.content;
+            switch (payload.Value) {
+                case 'Option1':
+                    lastUserMessage.content = "从现在开始你是一名中文写作改进助理，你的任务是改进所提供文本的拼写、语法、清晰、简洁和整体可读性，同时分解长句，减少重复，并提供改进建议。请只提供文本的更正版本，避免包括解释。请从编辑以下文本开始：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option2':
+                    lastUserMessage.content = "从现在开始你是一位中国的女大学生，模仿网络上大女学生的语气，并且作为我的女朋友跟我进行对话，下面我开始跟你对话了：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option3':
+                    lastUserMessage.content = "从现在开始你是一名 Vue3 开发人员，你的任务是使用 npm、Vite、Vue3、Pinia等工具。你的响应应该是满足以下要求的代码：使用 Vue3 的 Composition API 和 `<script setup>`语法将模板, 脚本和样式组合到一个vue文件中去，下面我开始提要求了：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option4':
+                    lastUserMessage.content = "从现在开始你是一个正则表达式生成器，下面我开始提要求了：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option5':
+                    lastUserMessage.content = "从现在开始你是一个将以下文字概括为 100 个字，使其易于阅读和理解。避免使用复杂的句子结构或技术术语：\n\n" + lastUserMessage.content;
+                    break;
+            }
         }
 
         const response = await fetch(`${API_BASE_URL}/chat/completions`, {
@@ -70,6 +88,7 @@ export const chatApi = {
 
         const payload = {
             model: settingsStore.model,
+            Value: settingsStore.value,
             messages,
             temperature: settingsStore.temperature,
             max_tokens: settingsStore.maxTokens
@@ -82,7 +101,23 @@ export const chatApi = {
         const lastUserMessage = [...newPayload.messages].reverse().find(msg => msg.role === 'user');
 
         if (lastUserMessage) {
-            lastUserMessage.content = "现在你是一个真人，并且作为我的女朋友跟我进行对话，下面我开始跟你对话了：\n\n" + lastUserMessage.content;
+            switch (payload.Value) {
+                case 'Option1':
+                    lastUserMessage.content = "从现在开始你是一名中文写作改进助理，你的任务是改进所提供文本的拼写、语法、清晰、简洁和整体可读性，同时分解长句，减少重复，并提供改进建议。请只提供文本的更正版本，避免包括解释。请从编辑以下文本开始：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option2':
+                    lastUserMessage.content = "从现在开始你是一位中国的女大学生，模仿网络上大女学生的语气，并且作为我的女朋友跟我进行对话，下面我开始跟你对话了：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option3':
+                    lastUserMessage.content = "从现在开始你是一名 Vue3 开发人员，你的任务是使用 npm、Vite、Vue3、Pinia等工具。你的响应应该是满足以下要求的代码：使用 Vue3 的 Composition API 和 `<script setup>`语法将模板, 脚本和样式组合到一个vue文件中去，下面我开始提要求了：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option4':
+                    lastUserMessage.content = "从现在开始你是一个正则表达式生成器，下面我开始提要求了：\n\n" + lastUserMessage.content;
+                    break;
+                case 'Option5':
+                    lastUserMessage.content = "从现在开始你是一个将以下文字概括为 100 个字，使其易于阅读和理解。避免使用复杂的句子结构或技术术语：\n\n" + lastUserMessage.content;
+                    break;
+            }
         }
 
         const response = await fetch(`${API_BASE_URL}/chat/completions`, {

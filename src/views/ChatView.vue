@@ -239,7 +239,7 @@ const handleRegenerate = async (message) => {
 
 // 计算宽度的函数
 const calculateWidth = () => {
-  webWidth.value = document.body.clientWidth - 250;
+  webWidth.value = document.body.clientWidth - 300;
   // console.log("当前网页宽度：", webWidth.value);
 };
 

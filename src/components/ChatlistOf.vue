@@ -132,7 +132,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .chat-sidebar {
   border-right: 1px solid var(--border-color);
-  width: 250px;
+  width: 300px;
   background-color: var(--bg-color);
   padding: 10px 0 10px 10px;
   display: flex;

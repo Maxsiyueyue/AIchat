@@ -1,6 +1,25 @@
 <template>
   <!-- 聊天输入容器 -->
   <div class="chat-input-container">
+    <!-- 选择器 -->
+    <div class="chat-selector">
+      <el-select
+        v-model="settings.value"
+        placeholder="提示词"
+        style="width: 200px"
+      >
+        <template #header>
+          <span>提示词</span>
+        </template>
+        <el-option
+          v-for="item in theSuggestionWord"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
+
     <!-- 输入框和按钮的组合 -->
     <div class="input-wrapper">
       <!-- 添加文件上传区域 -->
@@ -60,6 +79,7 @@
         @keydown.enter.shift.exact="newline"
         @input="adjustHeight"
         ref="inputRef"
+        input-style="box-shadow: none;"
       />
 
       <div class="button-group">
@@ -68,15 +88,29 @@
           <el-button circle :icon="Upload" @click="toggleUpload" />
         </el-tooltip> -->
 
+        <!-- 清空对话 -->
         <el-tooltip content="清空对话" placement="top">
-          <el-button circle type="danger" :icon="Delete" @click="handleClear" />
+          <el-button
+            circle
+            type="danger"
+            :icon="Delete"
+            @click="handleClear"
+            size="large"
+          />
         </el-tooltip>
 
-        <el-button type="primary" :loading="loading" @click="handleSend">
+        <!-- 发送 -->
+        <el-button
+          type="primary"
+          :loading="loading"
+          @click="handleSend"
+          size="large"
+          style="border-radius: 0.5rem"
+        >
           <template #icon>
-            <el-icon><Position /></el-icon>
+            <el-icon><Promotion /></el-icon>
           </template>
-          发送
+          <!-- 发送 -->
         </el-button>
       </div>
     </div>
@@ -88,7 +122,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, reactive, watch } from "vue";
 import {
   Delete,
   Position,
@@ -97,6 +131,7 @@ import {
   Document,
 } from "@element-plus/icons-vue";
 import { useChatStore } from "../stores/chat";
+import { useSettingsStore, theSuggestionWord } from "../stores/settings.js";
 import { ElMessageBox } from "element-plus";
 
 // 定义组件的属性
@@ -105,6 +140,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+});
+
+// 使用设置存储
+const settingsStore = useSettingsStore();
+
+// 设置对象，使用reactive进行响应式处理
+const settings = reactive({
+  // 默认提示词
+  value: settingsStore.value,
 });
 
 // 定义组件的事件
@@ -116,7 +160,7 @@ const chatStore = useChatStore();
 const messageText = ref("");
 
 // 输入框的占位符
-const placeholder = `开始你的对话咯。`;
+const placeholder = `开始你的对话咯。(shitf+enter换行)`;
 
 // 计算属性，用于获取聊天存储中的Token计数
 const tokenCount = computed(() => chatStore.tokenCount);
@@ -249,16 +293,29 @@ const adjustHeight = () => {
 <style lang="scss" scoped>
 // 聊天输入容器的样式
 .chat-input-container {
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 200px;
+  padding: 1rem 1rem 0.5rem;
   background-color: var(--bg-color);
   border-top: 1px solid var(--border-color);
+}
+
+.chat-selector {
+  display: flex;
+  padding: 10px;
+  :deep(.el-select__wrapper) {
+    box-shadow: none;
+    background-color: #f2f3f5;
+  }
 }
 
 // 输入框和按钮组合的样式
 .input-wrapper {
   display: flex;
   gap: 1rem;
-  margin-bottom: 0.5rem;
+  height: 100%;
 
   .el-input {
     flex: 1;
