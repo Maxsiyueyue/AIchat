@@ -1,7 +1,7 @@
 import { useSettingsStore } from '../stores/settings'
 // 修改 API 地址
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://你的render域名.onrender.com/api'
-const ADMIN_API_URL = import.meta.env.VITE_ADMIN_API_URL || 'https://你的render域名.onrender.com/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://aichat-walr.onrender.com/api'
+const ADMIN_API_URL = import.meta.env.VITE_ADMIN_API_URL || 'https://aichat-walr.onrender.com/api'
 
 const createHeaders = () => {
     const settingsStore = useSettingsStore()
@@ -178,7 +178,7 @@ export const adminApi = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(userData),
-                credentials: 'include' // 添加这一行，确保携带cookies
+                credentials: 'include'
             });
             
             console.log('登录响应状态:', response.status);

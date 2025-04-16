@@ -113,3 +113,11 @@ server.listen(PORT, () => {
 
 // 不再需要导出 connectedUsers
 module.exports = { app, server, io };
+
+// 修改API路由前缀
+app.use('/api', require('./routes/api'));
+
+// 添加根路由响应
+app.get('/', (req, res) => {
+  res.send('AI聊天后端服务运行中');
+});
