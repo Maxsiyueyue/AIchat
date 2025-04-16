@@ -151,6 +151,11 @@ const settings = reactive({
   value: settingsStore.value,
 });
 
+// 监听 settings.value 的变化，并更新到 store 中
+watch(() => settings.value, (newValue) => {
+  settingsStore.updateSettings({ value: newValue });
+}, { immediate: true });
+
 // 定义组件的事件
 const emit = defineEmits(["send", "clear"]);
 
@@ -263,7 +268,7 @@ const newline = (e) => {
 const handleClear = async () => {
   try {
     // 使用Element Plus的消息框组件，提示用户是否确定清空对话记录
-    await ElMessageBox.confirm("确定要清空所有对话记录吗？", "警告", {
+    await ElMessageBox.confirm("确定要清空当前对话记录吗？", "警告", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       type: "warning",

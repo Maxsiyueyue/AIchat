@@ -5,21 +5,21 @@ import { defineStore } from 'pinia'
 import { openDB } from 'idb';
 
 const chatDB = openDB('chat-db', 1, {
-  upgrade(db) {
-    db.createObjectStore('chat-store');
-  }
+    upgrade(db) {
+        db.createObjectStore('chat-store');
+    }
 });
 
 const indexedDbStorage = {
-  async getItem(key) {
-    return (await chatDB).get('chat-store', key);
-  },
-  async setItem(key, value) {
-    return (await chatDB).put('chat-store', value, key);
-  },
-  async removeItem(key) {
-    return (await chatDB).delete('chat-store', key);
-  }
+    async getItem(key) {
+        return (await chatDB).get('chat-store', key);
+    },
+    async setItem(key, value) {
+        return (await chatDB).put('chat-store', value, key);
+    },
+    async removeItem(key) {
+        return (await chatDB).delete('chat-store', key);
+    }
 };
 
 // 定义一个名为'chat'的Pinia存储
@@ -72,11 +72,11 @@ export const useChatStore = defineStore('chat', {
             );
             // 删除对应的消息记录
             delete this.recordedSessions.messages[sessionId];
-            
+
             // 如果删除的是当前活动会话，则切换到第一个会话或设为null
             if (this.activeSessionId === sessionId) {
-                this.activeSessionId = this.recordedSessions.sessionList.length > 0 
-                    ? this.recordedSessions.sessionList[0].id 
+                this.activeSessionId = this.recordedSessions.sessionList.length > 0
+                    ? this.recordedSessions.sessionList[0].id
                     : null;
             }
         },
@@ -87,7 +87,7 @@ export const useChatStore = defineStore('chat', {
             if (!this.activeSessionId) {
                 this.createSession();
             }
-            
+
             // 添加消息到当前会话
             this.recordedSessions.messages[this.activeSessionId].push({
                 id: Date.now(),                // 生成唯一ID
@@ -99,7 +99,7 @@ export const useChatStore = defineStore('chat', {
         // 更新最后一条消息的内容（用于流式响应）
         updateLastMessage(content) {
             if (!this.activeSessionId) return;
-            
+
             const messages = this.recordedSessions.messages[this.activeSessionId];
             if (messages && messages.length > 0) {
                 const lastMessage = messages[messages.length - 1];
@@ -120,7 +120,26 @@ export const useChatStore = defineStore('chat', {
                 this.recordedSessions.messages[this.activeSessionId] = [];
             }
         },
-        
+
+        // 清除所有会话记录
+        clearAllChats() {
+            // 重置会话列表和消息内容
+            this.recordedSessions = {
+                sessionList: [],
+                messages: {}
+            };
+            // 重置当前活动会话ID
+            this.activeSessionId = null;
+            // 重置Token计数
+            this.tokenCount = {
+                total: 0,
+                prompt: 0,
+                completion: 0
+            };
+            // 创建一个新的默认会话
+            this.createSession('默认会话');
+        },
+
         // 初始化存储（如果没有会话则创建一个）
         initStore() {
             if (this.recordedSessions.sessionList.length === 0) {

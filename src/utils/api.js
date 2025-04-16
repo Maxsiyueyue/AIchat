@@ -1,12 +1,21 @@
 import { useSettingsStore } from '../stores/settings'
 
 const API_BASE_URL = 'https://api.siliconflow.cn/v1'
+const ADMIN_API_URL = 'http://localhost:5001/api'
 
 const createHeaders = () => {
     const settingsStore = useSettingsStore()
     return {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${settingsStore.apiKey}`
+    }
+}
+
+// 创建admin axios实例
+const apiClient = {
+    baseURL: ADMIN_API_URL,
+    headers: {
+        'Content-Type': 'application/json'
     }
 }
 
@@ -148,4 +157,105 @@ export const chatApi = {
 
         return await response.json()
     }
-} 
+}
+
+// 管理API
+export const adminApi = {
+    // 管理员登录
+    async login(username, password) {
+        try {
+            console.log('发送登录请求:', { username, password: '***' });
+            
+            // 确保用户名和密码是字符串类型
+            const userData = {
+                username: String(username),
+                password: String(password)
+            };
+            
+            const response = await fetch(`${ADMIN_API_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData),
+                credentials: 'include' // 添加这一行，确保携带cookies
+            });
+            
+            console.log('登录响应状态:', response.status);
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('登录失败:', errorData);
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('登录成功');
+            return data;
+        } catch (error) {
+            console.error('登录请求错误:', error);
+            throw error;
+        }
+    },
+
+    // 获取在线用户
+    async getOnlineUsers(token) {
+        try {
+            const response = await fetch(`${ADMIN_API_URL}/stats/online`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token
+                }
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            
+            // 检查响应是否为空
+            const text = await response.text();
+            if (!text || text.trim() === '') {
+                console.warn('服务器返回了空响应');
+                return { onlineCount: 0, users: [] };
+            }
+            
+            try {
+                // 尝试解析JSON
+                const data = JSON.parse(text);
+                return data;
+            } catch (parseError) {
+                console.error('JSON解析失败:', parseError, '原始响应:', text);
+                // 返回默认值而不是抛出错误
+                return { onlineCount: 0, users: [] };
+            }
+        } catch (error) {
+            console.error('获取在线用户错误:', error);
+            // 返回默认值而不是重新抛出错误
+            return { onlineCount: 0, users: [] };
+        }
+    },
+
+    // 获取设备统计
+    async getDeviceStats(token) {
+        try {
+            const response = await fetch(`${ADMIN_API_URL}/stats/devices`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token
+                }
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || `HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            throw error.response ? error.response.data : new Error('获取设备统计失败');
+        }
+    }
+};

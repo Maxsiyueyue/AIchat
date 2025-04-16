@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "server": "cd server && node index.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run server\""
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
-    "axios": "^1.8.1",
+    "axios": "^1.8.4",
+    "echarts": "^5.4.3",
     "element-plus": "^2.8.8",
     "gh-pages": "^6.3.0",
     "highlight.js": "^11.10.0",
@@ -21,11 +23,13 @@
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^4.1.3",
     "sass": "^1.81.0",
+    "socket.io-client": "^4.8.1",
     "vue": "^3.4.29",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
+    "concurrently": "^9.1.2",
     "vite": "^5.3.1"
   }
 }

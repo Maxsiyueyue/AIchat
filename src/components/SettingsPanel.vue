@@ -1,7 +1,7 @@
 <template>
   <!-- 设置抽屉组件，用于展示和编辑应用设置 -->
   <el-drawer
-    style="background-color: var(--bg-color)"
+    style="background-color: #ffffff"
     v-model="visible"
     title="设置"
     direction="rtl"
@@ -106,7 +106,12 @@
 
       <!-- 保存设置按钮 -->
       <div class="settings-footer">
-        <el-button type="primary" @click="handleSave">保存设置</el-button>
+        <div class="footer-buttons">
+          <!-- 删除历史对话 -->
+          <el-button type="danger" @click="handleClear">删除</el-button>
+
+          <el-button type="primary" @click="handleSave">保存设置</el-button>
+        </div>
       </div>
     </div>
   </el-drawer>
@@ -115,12 +120,33 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { useSettingsStore, modelOptions } from "../stores/settings";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { useChatStore } from "../stores/chat";
+
+const chatStore = useChatStore();
 
 // 定义组件的props
 const props = defineProps({
   modelValue: Boolean,
 });
+
+// 删除历史记录
+const handleClear = async () => {
+  try {
+    // 使用Element Plus的消息框组件，提示用户是否确定清空对话记录
+    await ElMessageBox.confirm("确定要清空所有对话记录吗？", "警告", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    });
+    chatStore.clearAllChats();
+    ElMessage.success("对话记录已清空");
+    // 关闭抽屉
+    visible.value = false;
+  } catch {
+    // 如果用户取消操作，则不做任何事情
+  }
+};
 
 // 定义组件的emits
 const emit = defineEmits(["update:modelValue"]);
@@ -178,6 +204,12 @@ let openregisterurl = () => {
   margin-top: auto;
   padding-top: 1rem;
   text-align: right;
+  .footer-buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
 }
 
 // 全宽样式，用于表单项
