@@ -1,7 +1,7 @@
 import { useSettingsStore } from '../stores/settings'
-
-const API_BASE_URL = 'https://api.siliconflow.cn/v1'
-const ADMIN_API_URL = 'http://localhost:5001/api'
+// 修改 API 地址
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://你的render域名.onrender.com/api'
+const ADMIN_API_URL = import.meta.env.VITE_ADMIN_API_URL || 'https://你的render域名.onrender.com/api'
 
 const createHeaders = () => {
     const settingsStore = useSettingsStore()
