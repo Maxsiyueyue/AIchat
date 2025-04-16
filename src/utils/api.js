@@ -135,7 +135,8 @@ export const chatApi = {
                 ...createHeaders(),
                 ...(stream && { 'Accept': 'text/event-stream' })
             },
-            body: JSON.stringify(newPayload)
+            body: JSON.stringify(newPayload),
+            mode: 'cors' // 添加这一行
         })
 
         if (!response.ok) {

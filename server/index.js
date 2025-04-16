@@ -27,7 +27,7 @@ const io = socketIo(server, {
 
 // 中间件
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || ["http://localhost:5173", "https://capable-youtiao-59e6cc.netlify.app"],
+  origin: ['http://localhost:5173', 'https://capable-youtiao-59e6cc.netlify.app'],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
